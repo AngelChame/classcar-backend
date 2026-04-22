@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 import authRoutes from '../routes/auth.routes';
 import usuariosRoutes from '../routes/usuarios.routes';
 import cursosRoutes from '../routes/cursos.routes';
+import automovilesRoutes from '../routes/automoviles.routes';
 
 dotenv.config();
 
@@ -15,6 +16,7 @@ app.use(express.json());
 app.use('/api/auth', authRoutes);
 app.use('/api/usuarios', usuariosRoutes);
 app.use('/api/cursos', cursosRoutes);
+app.use('/api/automoviles', automovilesRoutes);
 
 const PORT = process.env.PORT || 3000;
 
