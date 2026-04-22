@@ -64,3 +64,28 @@ export const loginUser = async (data: any) => {
         }
     };
 };
+
+export const actualizarPassword = async (usuarioId: number, passwordActual: string, passwordNueva: string) => {
+    const usuario = await prisma.usuario.findUnique({
+        where: { id: usuarioId }
+    });
+
+    if (!usuario) {
+        throw new Error('usuario_no_encontrado');
+    }
+
+    const passwordValida = await bcrypt.compare(passwordActual, usuario.contrasenaHash);
+    
+    if (!passwordValida) {
+        throw new Error('password_actual_incorrecta');
+    }
+
+    const nuevoHash = await bcrypt.hash(passwordNueva, 10);
+
+    await prisma.usuario.update({
+        where: { id: usuarioId },
+        data: { contrasenaHash: nuevoHash }
+    });
+
+    return { id: usuario.id, correo: usuario.correo };
+};

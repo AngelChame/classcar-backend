@@ -24,7 +24,12 @@ export const crearNuevoAutomovil = async (req: Request, res: Response) => {
         const result = await crearAutomovil(req.body);
         res.status(201).json({ ok: true, data: result, mensaje: "Automóvil registrado exitosamente" });
     } catch (error: any) {
-        res.status(400).json({ ok: false, error: "error_creacion", mensaje: error.message });
+        const status = error.message === 'marca_vehiculo_invalida_api_externa' ? 400 : 500;
+        const mensajeHumanizado = error.message === 'marca_vehiculo_invalida_api_externa' 
+            ? "La marca del vehículo no existe en los registros oficiales de la NHTSA." 
+            : error.message;
+            
+        res.status(status).json({ ok: false, error: error.message, mensaje: mensajeHumanizado });
     }
 };
 

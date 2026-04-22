@@ -15,6 +15,27 @@ export const obtenerAutomovilPorId = async (id: number) => {
 };
 
 export const crearAutomovil = async (data: any) => {
+    const marca = data.modelo.split(' ')[0];
+    
+    try {
+        const response = await fetch(`https://vpic.nhtsa.dot.gov/api/vehicles/getmodelsformake/${marca}?format=json`);
+        
+        if (!response.ok) {
+            throw new Error('error_conexion_nhtsa');
+        }
+
+        const nhtsaData = await response.json();
+
+        if (!nhtsaData.Results || nhtsaData.Results.length === 0) {
+            throw new Error('marca_vehiculo_invalida_api_externa');
+        }
+    } catch (error: any) {
+        if (error.message === 'marca_vehiculo_invalida_api_externa') {
+            throw error;
+        }
+        throw new Error('error_verificacion_vehiculo');
+    }
+
     return await prisma.automovil.create({
         data: {
             modelo: data.modelo,
