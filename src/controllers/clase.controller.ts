@@ -1,6 +1,6 @@
 import { Response } from 'express';
 import { AuthRequest } from '../middlewares/auth.middleware';
-import { obtenerClasesUsuario, obtenerClasePorId, crearReserva, cancelarClase, completarClase, asignarAutomovil } from '../services/clase.service';
+import { obtenerClasesUsuario, obtenerClasePorId, crearReserva, cancelarClase, completarClase, asignarAutomovil,obtenerTodasLasClasesAdmin } from '../services/clase.service';
 
 export const listarMisClases = async (req: AuthRequest, res: Response) => {
     try {
@@ -54,5 +54,14 @@ export const asignarAuto = async (req: AuthRequest, res: Response) => {
         res.status(200).json({ ok: true, data: result, mensaje: "Automóvil asignado" });
     } catch (error: any) {
         res.status(400).json({ ok: false, error: "error_actualizacion", mensaje: error.message });
+    }
+};
+
+export const listarTodasLasClases = async (req: AuthRequest, res: Response) => {
+    try {
+        const result = await obtenerTodasLasClasesAdmin();
+        res.status(200).json({ ok: true, data: result, mensaje: "Clases obtenidas" });
+    } catch (error: any) {
+        res.status(500).json({ ok: false, error: "error_servidor", mensaje: error.message });
     }
 };

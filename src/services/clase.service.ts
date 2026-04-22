@@ -135,3 +135,28 @@ export const asignarAutomovil = async (id: number, automovilId: number) => {
         data: { automovilId }
     });
 };
+
+export const obtenerTodasLasClasesAdmin = async () => {
+    return await prisma.clase.findMany({
+        include: {
+            inscripcion: {
+                include: {
+                    alumno: {
+                        select: { nombre: true, apellidoPaterno: true }
+                    }
+                }
+            },
+            instructor: {
+                include: {
+                    usuario: {
+                        select: { nombre: true, apellidoPaterno: true }
+                    }
+                }
+            },
+            automovil: {
+                select: { modelo: true, placa: true }
+            }
+        },
+        orderBy: { fecha: 'desc' }
+    });
+};
