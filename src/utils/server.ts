@@ -5,6 +5,7 @@ import authRoutes from '../routes/auth.routes';
 import usuariosRoutes from '../routes/usuarios.routes';
 import cursosRoutes from '../routes/cursos.routes';
 import automovilesRoutes from '../routes/automoviles.routes';
+import disponibilidadRoutes from '../routes/disponibilidad.routes';
 
 dotenv.config();
 
@@ -17,6 +18,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/usuarios', usuariosRoutes);
 app.use('/api/cursos', cursosRoutes);
 app.use('/api/automoviles', automovilesRoutes);
+app.use('/api/instructores/disponibilidad', disponibilidadRoutes);
 
 const PORT = process.env.PORT || 3000;
 
