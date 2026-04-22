@@ -7,6 +7,7 @@ import cursosRoutes from '../routes/cursos.routes';
 import automovilesRoutes from '../routes/automoviles.routes';
 import disponibilidadRoutes from '../routes/disponibilidad.routes';
 import inscripcionesRoutes from '../routes/inscripciones.routes';
+import clasesRoutes from '../routes/clases.routes';
 
 dotenv.config();
 
@@ -21,6 +22,7 @@ app.use('/api/cursos', cursosRoutes);
 app.use('/api/automoviles', automovilesRoutes);
 app.use('/api/instructores/disponibilidad', disponibilidadRoutes);
 app.use('/api/inscripciones', inscripcionesRoutes);
+app.use('/api/clases', clasesRoutes);
 
 const PORT = process.env.PORT || 3000;
 
