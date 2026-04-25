@@ -6,7 +6,7 @@ import { enviarEmail } from '../config/mailer';
 const prisma = new PrismaClient();
 
 const generarPasswordTemporal = () => {
-    return crypto.randomBytes(8).toString('hex');
+    return 'TMP_' + crypto.randomBytes(8).toString('hex');
 };
 
 export const crearNuevoUsuario = async (data: any) => {

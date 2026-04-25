@@ -5,14 +5,69 @@ const prisma = new PrismaClient();
 
 export const obtenerClasesUsuario = async (usuarioId: number, rol: string) => {
     if (rol === 'alumno') {
-        const inscripciones = await prisma.inscripcion.findMany({ where: { alumnoId: usuarioId }, select: { id: true } });
+        const inscripciones = await prisma.inscripcion.findMany({
+            where: { alumnoId: usuarioId },
+            select: { id: true }
+        });
+
         const inscripcionesIds = inscripciones.map(i => i.id);
-        return await prisma.clase.findMany({ where: { inscripcionId: { in: inscripcionesIds } }, include: { instructor: true, automovil: true } });
+
+        return await prisma.clase.findMany({
+            where: { inscripcionId: { in: inscripcionesIds } },
+            include: {
+                inscripcion: {
+                    include: {
+                        alumno: {
+                            select: { nombre: true, apellidoPaterno: true }
+                        }
+                    }
+                },
+                instructor: {
+                    include: {
+                        usuario: {
+                            select: { nombre: true, apellidoPaterno: true }
+                        }
+                    }
+                },
+                automovil: {
+                    select: { modelo: true, placa: true }
+                }
+            },
+            orderBy: { fecha: 'asc' }
+        });
+
     } else if (rol === 'instructor') {
-        const instructor = await prisma.instructor.findUnique({ where: { usuarioId } });
+        const instructor = await prisma.instructor.findUnique({
+            where: { usuarioId }
+        });
+
         if (!instructor) throw new Error('instructor_no_encontrado');
-        return await prisma.clase.findMany({ where: { instructorId: instructor.id }, include: { inscripcion: { include: { alumno: true } }, automovil: true } });
+
+        return await prisma.clase.findMany({
+            where: { instructorId: instructor.id },
+            include: {
+                inscripcion: {
+                    include: {
+                        alumno: {
+                            select: { nombre: true, apellidoPaterno: true }
+                        }
+                    }
+                },
+                instructor: {
+                    include: {
+                        usuario: {
+                            select: { nombre: true, apellidoPaterno: true }
+                        }
+                    }
+                },
+                automovil: {
+                    select: { modelo: true, placa: true }
+                }
+            },
+            orderBy: { fecha: 'asc' }
+        });
     }
+
     throw new Error('rol_no_valido');
 };
 
